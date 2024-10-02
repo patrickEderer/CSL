@@ -7,7 +7,7 @@ public class CInteger implements Variable {
     Integer value;
 
     @Override
-    public void initialize(Object value, String name) {
+    public void initialize(String name, Object value) {
         this.value = (Integer) value;
         if (value != null) {
             StoredVariables.variables.put(name, this);

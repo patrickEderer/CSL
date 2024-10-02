@@ -1,7 +1,7 @@
 package interpreter;
 
 public interface Variable {
-    void initialize(Object value, String name);
+    void initialize(String name, Object value);
 
     Object getValue(String name);
 
