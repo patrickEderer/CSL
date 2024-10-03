@@ -49,6 +49,4 @@ public class Interpreter {
 
         return output;
     }
-
-    private
 }
