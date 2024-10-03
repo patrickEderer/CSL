@@ -1,17 +1,38 @@
 package interpreter.logics;
 
+import exceptions.VariableNotFoundException;
+import interpreter.Keywords;
+import interpreter.Variable;
+import interpreter.storage.StoredVariables;
+import interpreter.variables.CInteger;
+
+import java.util.InputMismatchException;
+
 public class Expression {
-    static boolean check(String expression, String fileName, int lineNumber) {
-        String[] words = expression.split(" ");
-        String leftSide;
-        String rightSide;
+    static Variable eval(String expression, String fileName, int lineNumber) {
+        //Check if it is an operation
+        if (Keywords.expressions.stream().anyMatch(expression::contains)) {
+            String[] words = expression.split(" ");
+            String newExpression = "";
 
-        //
-        if (words[0].startsWith("(")) {
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].contains(")")) {
-
+            for (String word : words) {
+                if (Keywords.expressions.contains(word)) {
+                    eval(newExpression, fileName, lineNumber);
+                } else {
+                    newExpression += word + " ";
                 }
+            }
+
+
+        }
+        //Get variable or literal
+        else {
+            try {
+                return new CInteger().literal(Integer.parseInt(expression));
+            } catch (InputMismatchException _) {
+                if (StoredVariables.variables.containsKey(expression)) {
+                    return StoredVariables.variables.get(expression);
+                } else throw new VariableNotFoundException(fileName, lineNumber);
             }
         }
     }

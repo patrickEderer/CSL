@@ -1,10 +1,21 @@
 package interpreter.variables;
 
+import exceptions.WrongVariableTypeException;
 import interpreter.Variable;
 import interpreter.storage.StoredVariables;
 
 public class CInteger implements Variable {
     Integer value;
+    final int varType = Variable.INTEGER;
+
+    @Override
+    public Variable literal(Object value) {
+        if (!(value instanceof Integer)) {
+            throw new WrongVariableTypeException();
+        }
+        this.value = (int) value;
+        return this;
+    }
 
     @Override
     public void initialize(String name, Object value) {
@@ -22,5 +33,10 @@ public class CInteger implements Variable {
 
     public void declare(String name) {
         StoredVariables.variables.put(name, this);
+    }
+
+    @Override
+    public int getVarType() {
+        return varType;
     }
 }
