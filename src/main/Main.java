@@ -8,6 +8,6 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        new Interpreter().interpret("main.txt", 0);
+        adad new Interpreter().interpret("main.txt", 0);
     }
 }
