@@ -1,5 +1,6 @@
 package interpreter.variables;
 
+import exceptions.VariableAlreadyDeclaredException;
 import exceptions.WrongVariableTypeException;
 import interpreter.Variable;
 import interpreter.storage.StoredVariables;
@@ -21,18 +22,28 @@ public class CInteger implements Variable {
     public void initialize(String name, Object value) {
         this.value = (Integer) value;
         if (value != null) {
-            StoredVariables.variables.put(name, this);
+            if (!StoredVariables.variables.containsKey(name)) {
+                StoredVariables.variables.put(name, this);
+                System.out.println("Initialized var " + name);
+            } else {
+                throw new VariableAlreadyDeclaredException(name);
+            }
         } else {
             System.err.println("Wrong variable type for type Integer!");
         }
     }
 
-    public Object getValue(String name) {
+    public Object getValue() {
         return value;
     }
 
     public void declare(String name) {
-        StoredVariables.variables.put(name, this);
+        if (!StoredVariables.variables.containsKey(name)) {
+            StoredVariables.variables.put(name, this);
+            System.out.println("Declared var " + name);
+        } else {
+            throw new VariableAlreadyDeclaredException(name);
+        }
     }
 
     @Override

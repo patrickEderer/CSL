@@ -1,5 +1,6 @@
 package interpreter;
 
+import interpreter.logics.Expression;
 import interpreter.variables.CInteger;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class Interpreter {
     }
 
     private void interpretLine(String line, String fileName, int lineNumber) {
+        if (line.isEmpty()) return;
         try {
             String[] words = line.split(" ");
             if (Keywords.variables.contains(words[0])) {
@@ -34,19 +36,14 @@ public class Interpreter {
 
                 switch (words[0]) {
                     case "int" -> {
-                        if (initialize) new CInteger().initialize(name, Integer.parseInt(inlineOperation(inline, fileName, lineNumber)));
+                        if (initialize) new CInteger().initialize(name, Integer.parseInt(Expression.eval(inline, fileName, lineNumber).getValue() + ""));
                         else new CInteger().declare(name);
                     }
                 }
             }
         } catch (Exception e) {
-            System.err.println("Found error in " + fileName + " on line " + lineNumber + "\n" + e.getMessage());
+            System.err.println("Found error in " + fileName + " on line " + lineNumber);
+            throw new RuntimeException(e);
         }
-    }
-
-    private String inlineOperation(String inline, String fileName, int lineNumber) {
-        String output = "";
-
-        return output;
     }
 }

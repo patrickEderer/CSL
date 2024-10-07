@@ -9,7 +9,7 @@ import interpreter.variables.CInteger;
 import java.util.InputMismatchException;
 
 public class Expression {
-    static Variable eval(String expression, String fileName, int lineNumber) {
+    public static Variable eval(String expression, String fileName, int lineNumber) {
         //Check if it is an operation
         if (Keywords.expressions.stream().anyMatch(expression::contains)) {
             String[] words = expression.split(" ");
@@ -35,5 +35,6 @@ public class Expression {
                 } else throw new VariableNotFoundException(fileName, lineNumber);
             }
         }
+        return null;
     }
 }
