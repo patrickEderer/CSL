@@ -1,9 +1,12 @@
 package interpreter;
 
+import interpreter.logics.Expression;
+import interpreter.storage.StoredVariables;
 import interpreter.variables.CInteger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Interpreter {
@@ -21,7 +24,7 @@ public class Interpreter {
     private void interpretLine(String line, String fileName, int lineNumber) {
         try {
             String[] words = line.split(" ");
-            if (Keywords.variables.contains(words[0])) {
+            if (Keywords.variableTypes.contains(words[0])) {
                 boolean initialize = words.length >= 4;
                 String name = words[1];
 
@@ -34,19 +37,36 @@ public class Interpreter {
 
                 switch (words[0]) {
                     case "int" -> {
-                        if (initialize) new CInteger().initialize(name, Integer.parseInt(inlineOperation(inline, fileName, lineNumber)));
+                        if (initialize) new CInteger().initialize(name, Expression.eval(inline, fileName, lineNumber).getValue());
                         else new CInteger().declare(name);
+                    }
+                }
+            } else if (StoredVariables.variables.containsKey(words[0])) {
+                if (words[1].equals("=")) {
+                    StoredVariables.variables.get(words[0]).setValue(Expression.eval(arrayToString(Arrays.copyOfRange(words, 2, words.length)), fileName, lineNumber).getValue());
+                }
+            } else {
+                switch (words[0]) {
+                    case "print" -> {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int i = 1; i < words.length; i++) {
+                            stringBuilder.append(words[i]).append(" ");
+                        }
+                        System.out.println(Expression.eval(stringBuilder.toString(), fileName, lineNumber).getValue());
                     }
                 }
             }
         } catch (Exception e) {
-            System.err.println("Found error in " + fileName + " on line " + lineNumber + "\n" + e.getMessage());
+            System.err.println("Found error in " + fileName + " on line " + lineNumber);
+            throw new RuntimeException(e);
         }
     }
 
-    private String inlineOperation(String inline, String fileName, int lineNumber) {
-        String output = "";
-
-        return output;
+    private String arrayToString(String[] array) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String s : array) {
+            stringBuilder.append(s).append(" ");
+        }
+        return stringBuilder.toString();
     }
 }
