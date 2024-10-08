@@ -10,11 +10,16 @@ public class CInteger implements Variable {
 
     @Override
     public Variable literal(Object value) {
-        if (!(value instanceof Integer)) {
+        try {
+            this.value = (int) value;
+            return this;
+        } catch (NumberFormatException _) {
             throw new WrongVariableTypeException();
         }
-        this.value = (int) value;
-        return this;
+    }
+
+    public void declare(String name) {
+        StoredVariables.variables.put(name, this);
     }
 
     @Override
@@ -27,12 +32,13 @@ public class CInteger implements Variable {
         }
     }
 
-    public Object getValue(String name) {
+    public Object getValue() {
         return value;
     }
 
-    public void declare(String name) {
-        StoredVariables.variables.put(name, this);
+    @Override
+    public void setValue(Object value) {
+        this.value = (Integer) value;
     }
 
     @Override

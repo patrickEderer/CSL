@@ -7,7 +7,9 @@ public interface Variable {
 
     void initialize(String name, Object value);
 
-    Object getValue(String name);
+    Object getValue();
+
+    void setValue(Object value);
 
     void declare(String name);
 

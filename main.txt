@@ -1,2 +1,2 @@
-int number = 1
-print(number)
+int i = 10 * 6 / 3
+print i
